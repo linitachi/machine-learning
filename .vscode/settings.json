@@ -1,0 +1,10 @@
+{
+    "python.pythonPath": "C:\\Users\\lin\\AppData\\Local\\Programs\\Python\\Python36_64\\python.exe",
+    // 默認對Python文件進行靜態檢查
+    "python.linting.enabled": true,
+    // 默認在Python文件保存時進行靜態檢查
+    "python.linting.lintOnSave": true,
+    // 默認使用pylint對Python文件進行靜態檢查
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintUseMinimalCheckers": false,
+}
