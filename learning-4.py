@@ -22,30 +22,13 @@ def createDataSet(dataset, fileName):
     return dataset
 
 
-# def Expected_Value():
-#     E = 0.0
-#     for i in range(10):
-#         E = E+(i+1)/10
-#     return E
-
-
 if __name__ == '__main__':
 
     start = datetime.datetime.now()
     dataset = []
     accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
-    # u = Expected_Value()
     v1 = np.array(dataset).T
     print(np.around(np.cov(v1), 3))
-    # for i in range(len(dataset)):
-    #     v1 = np.array(dataset[i])
-    #     v1 = v1.reshape([1, 9])
-    #     v2 = v1.reshape([9, 1])
-    #     print(np.dot(v2-u, v1-u))
-    # plt.xlabel('K')
-    # plt.ylabel("accuracy(%)")
-    # plt.plot(range(3, 16), accuracy)
     end = datetime.datetime.now()
     print(end - start)
-    # plt.show()
