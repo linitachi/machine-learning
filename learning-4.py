@@ -29,6 +29,15 @@ if __name__ == '__main__':
     accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
     v1 = np.array(dataset).T
-    print(np.around(np.cov(v1), 3))
+
+    v2 = np.cov(v1)
+    v3 = np.corrcoef(v2)
+    for i in range(9):
+        for j in range(9):
+            if v3[i, j] < 0.5:
+                v3[i, j] = 0
+            elif i == j:
+                v3[i, j] = 0
+    print(np.around(v3, 3))
     end = datetime.datetime.now()
     print(end - start)
