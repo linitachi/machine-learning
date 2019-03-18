@@ -30,7 +30,7 @@ if __name__ == '__main__':
     v3 = np.corrcoef(v2)
     check = 0
     for i in range(9):
-        print('%d和' % (i+1), end=' ')
+        print('%d和' % (i+2), end=' ')
         for j in range(9):
             if v3[i, j] < 0.5:
                 v3[i, j] = 0
@@ -39,7 +39,7 @@ if __name__ == '__main__':
             else:
                 check = 1
                 print('%d' %
-                      (j+1), end=' ')
+                      (j+2), end=' ')
         if check == 1:
             print('have strong correlation')
             check = 0
