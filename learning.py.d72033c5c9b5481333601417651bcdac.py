@@ -1,7 +1,32 @@
 import random
 import matplotlib.pyplot as plt
+import numpy
 import math
 import datetime
+
+
+def Knn(input_tf, trainset_tf, k):
+    tf_distance = dict()
+    # 計算每個訓練集合特徵關鍵字字詞頻率向量和輸入向量的距離
+
+    for place in trainset_tf.keys():
+        tf_distance[place] = count_Distance(
+            trainset_tf.get(place)[:-1], input_tf)
+
+    # 把距離排序，取出k個最近距離的分類
+
+    class_count = dict()
+    for i, place in enumerate(sorted(tf_distance, key=tf_distance.get)):
+        current_class = trainset_tf.get(place)[-1]
+        class_count[current_class] = class_count.get(current_class, 0) + 1
+
+        if (i + 1) >= k:
+            break
+
+    for i, c in enumerate(sorted(class_count, key=class_count.get, reverse=True)):
+        if i == 0:
+            input_class = c
+    return int(input_class)
 
 
 def Knn(input_tf, trainset_tf, k):
@@ -41,6 +66,12 @@ def createDataSet(dataset, fileName):
     return dataset
 
 
+# def count_Distance(v1, v2):
+#     m1 = numpy.array(v1)
+#     m2 = numpy.array(v2)
+#     distance = numpy.linalg.norm(m1-m2)
+#     return distance
+
 def count_Distance(v1, v2):
     sum = 0.0
     for i in range(0, len(v1)):
@@ -75,7 +106,7 @@ if __name__ == '__main__':
     dataset = []
     accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
-    for j in range(10):
+    for j in range(1):
         s = datetime.datetime.now()
         k = 3
         trainset, testset = chose_seventity(dataset)
