@@ -27,10 +27,10 @@ if __name__ == '__main__':
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
     v1 = np.array(dataset).T
     v2 = np.cov(v1)
-    v3 = np.corrcoef(v2)
+    v3 = np.corrcoef(v1)
     check = 0
     for i in range(9):
-        print('%d和' % (i+2), end=' ')
+        print('attribute %d和' % (i+2), end=' ')
         for j in range(9):
             if v3[i, j] < 0.5:
                 v3[i, j] = 0
@@ -45,6 +45,6 @@ if __name__ == '__main__':
             check = 0
         else:
             print('void have no strong correlation')
-    print(np.around(v3, 3))
+    print(np.around(np.corrcoef(v1), 3))
     end = datetime.datetime.now()
     print(end - start)
