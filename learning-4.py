@@ -31,10 +31,10 @@ if __name__ == '__main__':
     for i in range(9):
         print('attribute %d和' % (i+2), end=' ')
         for j in range(9):
-            if v4[i, j] < 0.5 and v4[i, j] > -0.5:
-                v4[i, j] = 0
+            if v3[i, j] < 0.5 and v3[i, j] > -0.5:
+                v3[i, j] = 0
             elif i == j:
-                v4[i, j] = 0
+                v3[i, j] = 0
             else:
                 check = 1
                 print('%d' %
@@ -43,7 +43,7 @@ if __name__ == '__main__':
             print('have strong correlation')
             check = 0
         else:
-            print('void have no strong correlation')
+            print('Empty collection have no strong correlation')
 
     print(np.around(np.corrcoef(v1), 3))
     end = datetime.datetime.now()
