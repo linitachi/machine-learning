@@ -23,7 +23,6 @@ if __name__ == '__main__':
 
     start = datetime.datetime.now()
     dataset = []
-    accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
     v1 = np.array(dataset).T
     v2 = np.cov(v1)
