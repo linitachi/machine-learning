@@ -39,7 +39,6 @@ if __name__ == '__main__':
 
     start = datetime.datetime.now()
     dataset = []
-    accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "machine.data")
     trainset, testset = chose_seventity(dataset)
     trainset = np.array(trainset)
@@ -56,12 +55,11 @@ if __name__ == '__main__':
         for j in range(len(testset)):
             predict = np.append(predict, neigh.predict([testset[j, :7]]))
         check = testset[:, 7]
-        error = (check-predict)/predict
-        mean.append(np.sum(error)/len(error))
+        error = (predict-check)/check
+        mean.append(np.sum(error)/len(error)*100)
         k = k+1
-
     plt.xlabel('K')
-    plt.ylabel("error ratio")
+    plt.ylabel("error ratio(%)")
     plt.plot(mean)
     end = datetime.datetime.now()
     print(end - start)
