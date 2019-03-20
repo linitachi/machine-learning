@@ -28,14 +28,15 @@ if __name__ == '__main__':
     v1 = np.array(dataset).T
     v2 = np.cov(v1)
     v3 = np.corrcoef(v2)
+   
     check = 0
     for i in range(9):
         print('%d和' % (i+2), end=' ')
         for j in range(9):
-            if v3[i, j] < 0.5:
-                v3[i, j] = 0
+            if v4[i, j] < 0.5 and v4[i, j] > -0.5:
+                v4[i, j] = 0
             elif i == j:
-                v3[i, j] = 0
+                v4[i, j] = 0
             else:
                 check = 1
                 print('%d' %
@@ -46,5 +47,6 @@ if __name__ == '__main__':
         else:
             print('void have no strong correlation')
     print(np.around(v3, 3))
+    print(np.around(v4, 3))
     end = datetime.datetime.now()
     print(end - start)
