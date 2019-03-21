@@ -21,7 +21,7 @@ def Knn(input_tf, trainset_tf, k):
 
         if (i + 1) >= k:
             break
-
+    # 選出最多的分類 當成最後的分類
     for i, c in enumerate(sorted(class_count, key=class_count.get, reverse=True)):
         if i == 0:
             input_class = c
@@ -40,12 +40,16 @@ def createDataSet(dataset, fileName):
         line = f.readline()
     return dataset
 
+# 計算兩個點的距離
+
 
 def count_Distance(v1, v2):
     sum = 0.0
     for i in range(0, len(v1)):
         sum += math.pow(float(v1[i])-float(v2[i]), 2)
     return sum**0.5
+
+# 製造trainset
 
 
 def createTrainSet(dataset):
@@ -55,6 +59,8 @@ def createTrainSet(dataset):
         Key = i
         trainset[Key] = tem
     return trainset
+
+# 分割dataset 分成70%trainsey 及30%testset
 
 
 def chose_seventity(dataset):
@@ -75,23 +81,23 @@ if __name__ == '__main__':
     dataset = []
     accuracy = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
     dataset = createDataSet(dataset, "breast-cancer-wisconsin.data")
+    # j 跑10次
     for j in range(10):
-        s = datetime.datetime.now()
         k = 3
         trainset, testset = chose_seventity(dataset)
         trainset_tf = createTrainSet(trainset)
+        # 共205筆資料 做knn
         for i in range(len(testset)):
             s = datetime.datetime.now()
             input_tf = testset[i].split(',')[:-1]
             input_tf = list(map(int, input_tf))
             k = 3
+            # k從3~15 跑13次
             for w in range(13):
                 answer = Knn(input_tf, trainset_tf, k)
                 if answer == int(testset[i][-1]):
                     accuracy[w] = accuracy[w]+1
                 k = k+1
-            d = datetime.datetime.now()
-            print(d - s)
     for j in range(13):
         accuracy[j] = accuracy[j]/2050*100
         print("k="+str(j+3)+"的平均正確率: "+str(accuracy[j])+'%')

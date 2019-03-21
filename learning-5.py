@@ -1,12 +1,12 @@
-from sklearn.linear_model import LinearRegression
 import datetime
 import numpy as np
 import random
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
 from sklearn import preprocessing
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.metrics import mean_squared_error
+import math
 
 
 def createDataSet(dataset, fileName):
@@ -17,6 +17,7 @@ def createDataSet(dataset, fileName):
     while line:
         if line.find('?') == -1:
             attribute = line[:len(line)-1].split(",")
+            # 8 attribute
             data = [int(attribute[2]), int(attribute[3]), int(attribute[4]), int(attribute[5]),
                     int(attribute[6]), int(attribute[7]), int(attribute[8]), int(attribute[9])]
             dataset.append(data)
@@ -38,31 +39,64 @@ def chose_seventity(dataset):
     return trainset, testset
 
 
+def Knn_regression_predict(TRAN, answer, test, k):
+    tem = answer.copy()
+    distance_tem = np.array([])
+    distance = 0
+    neigh = KNeighborsRegressor(n_neighbors=k)
+    neigh.fit(TRAN, answer)
+    for i in range(len(TRAN)):
+        distance_tem = np.append(
+            distance_tem, [count_Distance(TRAN[i], test)], axis=0)
+
+    for i in range(k):
+        minv = np.where(distance_tem == np.min(distance_tem))
+        distance = distance+tem[minv[0][0]]
+        distance_tem = np.delete(distance_tem, minv[0][0])
+        tem = np.delete(tem, minv[0][0])
+
+    return distance/k
+
+
+def count_Distance(v1, v2):
+    sum = 0.0
+    for i in range(0, len(v1)):
+        sum += math.pow(float(v1[i])-float(v2[i]), 2)
+    return sum**0.5
+
+
+def MSE_function(answer, test):
+    Sum = 0.0
+    Sum += (answer-test)**2
+    Sum = np.sum(Sum)
+    Sum = Sum/len(answer)
+    return Sum
+
+
 if __name__ == '__main__':
 
     start = datetime.datetime.now()
     dataset = []
     dataset = createDataSet(dataset, "machine.data")
     X_scaled = preprocessing.scale(dataset).tolist()
-    final = [0] * 13
+    MSE = [0] * 13
     r2Score = [0] * 13
     times = 10
 
     for time in range(times):
         k = 3
+        # trainset, testset = chose_seventity(dataset)
         trainset, testset = chose_seventity(X_scaled)
         trainset = np.array(trainset)
         testset = np.array(testset)
-        answer = trainset[:, 6]
-        TRAN = np.delete(trainset, np.s_[6:8], axis=1)
-        mean = []
+        answer = trainset[:, 6]  # attribute 9
+        TRAN = np.delete(trainset, np.s_[6: 8], axis=1)  # 砍掉 attribute 9 10
         for i in range(13):
             predict = np.array([])
-            neigh = KNeighborsRegressor(n_neighbors=k)
-            neigh.fit(TRAN, answer)
-            test = np.delete(testset, np.s_[6:8], axis=1)
+            test = np.delete(testset, np.s_[6: 8], axis=1)
             for j in range(len(testset)):
-                predict = np.append(predict, neigh.predict([test[j, ]]))
+                predict = np.append(
+                    predict, Knn_regression_predict(TRAN, answer, test[j, ], k))
             check = testset[:, 6]
             # 把極端值忽略
             sub = predict-check
@@ -77,16 +111,21 @@ if __name__ == '__main__':
                 predict = np.delete(predict, minv)
                 check = np.delete(check, minv)
 
-            error = mean_squared_error(check, predict)
-            score = r2_score(check, predict)
+            error = MSE_function(check, predict)
+            # r2_score
+            score = 1-(np.sum((check-predict)**2)) / \
+                np.sum((check - np.mean(check))**2)
+
             r2Score[i] = r2Score[i]+score
-            final[i] = final[i]+error
+            MSE[i] = MSE[i]+error
             k = k+1
-    final = [c/times for c in final]
+    MSE = [c/times for c in MSE]
     r2Score = [c/times for c in r2Score]
+
     plt.xlabel('K')
     plt.ylabel("Mean squared error ")
-    plt.plot(range(3, 16), final)
+    plt.plot(range(3, 16), MSE)
+
     end = datetime.datetime.now()
     print(end - start)
     plt.show()
