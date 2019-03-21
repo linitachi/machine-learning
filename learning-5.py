@@ -2,10 +2,6 @@ import datetime
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-from sklearn.metrics import r2_score
-from sklearn import preprocessing
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.metrics import mean_squared_error
 import math
 
 
@@ -43,8 +39,6 @@ def Knn_regression_predict(TRAN, answer, test, k):
     tem = answer.copy()
     distance_tem = np.array([])
     distance = 0
-    neigh = KNeighborsRegressor(n_neighbors=k)
-    neigh.fit(TRAN, answer)
     for i in range(len(TRAN)):
         distance_tem = np.append(
             distance_tem, [count_Distance(TRAN[i], test)], axis=0)
@@ -78,14 +72,20 @@ if __name__ == '__main__':
     start = datetime.datetime.now()
     dataset = []
     dataset = createDataSet(dataset, "machine.data")
-    X_scaled = preprocessing.scale(dataset).tolist()
+    dataset = np.array(dataset)
+    # calculate mean
+    X_mean = dataset.mean(axis=0)
+    # calculate variance
+    X_std = dataset.std(axis=0)
+    # standardize X
+    X_scaled = (dataset-X_mean)/X_std
+    X_scaled = X_scaled.tolist()
     MSE = [0] * 13
     r2Score = [0] * 13
     times = 10
 
     for time in range(times):
         k = 3
-        # trainset, testset = chose_seventity(dataset)
         trainset, testset = chose_seventity(X_scaled)
         trainset = np.array(trainset)
         testset = np.array(testset)
