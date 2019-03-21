@@ -6,6 +6,7 @@ from sklearn.neighbors import KNeighborsRegressor
 from sklearn.metrics import mean_squared_error
 import matplotlib.pyplot as plt
 from sklearn.metrics import r2_score
+from sklearn import preprocessing
 
 
 def createDataSet(dataset, fileName):
@@ -42,13 +43,14 @@ if __name__ == '__main__':
     start = datetime.datetime.now()
     dataset = []
     dataset = createDataSet(dataset, "machine.data")
+    X_scaled = preprocessing.scale(dataset).tolist()
     final = [0] * 13
     r2Score = [0] * 13
     times = 10
 
     for time in range(times):
         k = 3
-        trainset, testset = chose_seventity(dataset)
+        trainset, testset = chose_seventity(X_scaled)
         trainset = np.array(trainset)
         testset = np.array(testset)
         answer = trainset[:, 6]
