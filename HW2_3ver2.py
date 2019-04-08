@@ -92,10 +92,16 @@ def count_attributes2or4(dataset, i, p2, p4):
     for k in range(len(dataset)):
         if tem[k] == 2:
             p_attribute112[attribute[k] -
-                           1] = p_attribute112[attribute[k]-1]+1/p2
+                           1] = p_attribute112[attribute[k]-1]+1
         if tem[k] == 4:
             p_attribute114[attribute[k] -
-                           1] = p_attribute114[attribute[k]-1]+1/p4
+                           1] = p_attribute114[attribute[k]-1]+1
+
+    for j in range(10):
+        total = p_attribute112[j]+p_attribute114[j]
+        if total != 0:
+            p_attribute112[j] = p_attribute112[j]/total
+            p_attribute114[j] = p_attribute114[j]/total
     return p_attribute112, p_attribute114
 
 
@@ -114,6 +120,7 @@ if __name__ == '__main__':
 
     dataset = dataset.tolist()
     accacylist = []
+
     for h in range(10):
         trainset, testset = chose_seventity(dataset)
         trainset = np.array(trainset)
@@ -125,12 +132,15 @@ if __name__ == '__main__':
         for i in testset:
             final2 = 1
             final4 = 1
-            for j in range(9):
-                if p_attribute[j][i[j]-1] != 0:
-                    final2 *= p2 * \
-                        pa2ofconditional2[j][i[j]-1]/p_attribute[j][i[j]-1]
-                    final4 *= p2 * \
-                        pa2ofconditional4[j][i[j]-1]/p_attribute[j][i[j]-1]
+            for attribute in range(9):
+                if pa2ofconditional2[attribute][i[attribute]-1] != 0:
+                    final2 *= pa2ofconditional2[attribute][i[attribute]-1]
+                else:
+                    final2 *= 1
+                if pa2ofconditional4[attribute][i[attribute]-1] != 0:
+                    final4 *= pa2ofconditional4[attribute][i[attribute]-1]
+                else:
+                    final4 *= 1
             if final2 >= final4:
                 decide = 2
             else:
