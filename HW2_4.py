@@ -101,24 +101,8 @@ def Knn(trainset, test, k, l, j, h):
         testnp = np.array([test[l], test[j], test[h]])
         distance_tem = np.append(
             distance_tem, [count_Distance(disnp, testnp)], axis=0)
-    print(np.argsort(distance_tem)[2])
-    minset = []
 
-    for i in range(3):
-        minv = np.where(distance_tem == np.min(distance_tem))
-        if(len(minv[0]) >= 3):
-            minset = np.array([minv[0][0], minv[0][1], minv[0][2]])
-            break
-        elif(len(minv[0]) == 2):
-            distance_tem[minv[0][0]] = 999999999
-            distance_tem[minv[0][1]] = 999999999
-            minset = np.append(
-                minset, [minv[0][0], minv[0][1]], axis=0)
-        else:
-            distance_tem[minv[0][0]] = 999999999
-            minset = np.append(
-                minset, [minv[0][0]], axis=0)
-    minset = list(map(int, minset))
+    minset = np.argsort(distance_tem)
     # 找出答案
     if trainset[:, 9][minset[0]] == trainset[:, 9][minset[1]]:
         anwer = trainset[:, 9][minset[0]]
