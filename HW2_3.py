@@ -2,7 +2,6 @@ import datetime
 import numpy as np
 import random
 import matplotlib.pyplot as plt
-import math
 
 
 def createDataSet(dataset, fileName):

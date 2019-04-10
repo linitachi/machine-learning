@@ -1,4 +1,3 @@
-from sklearn.preprocessing import StandardScaler
 import numpy as np
 import matplotlib.pyplot as plt
 import datetime
@@ -38,15 +37,17 @@ def Handle_question_mark(s, attribute):
 
 def normalize(dataset):
     # 正規化資料
-    normalize = StandardScaler()
-    return normalize.fit_transform(dataset)
+    mean = dataset.mean(axis=0)
+    std = dataset.std(axis=0)
+    normalizeset = (dataset-mean)/std
+    return normalizeset
 
 
 def find_Covariancematrix_eigen(dataset):
     # 找出共變異係數矩陣的特徵值
     covmatrix = np.cov(dataset.T)
     eigenvalue, eigenvector = np.linalg.eig(covmatrix)
-    return eigenvalue
+    return eigenvalue, eigenvector
 
 
 if __name__ == '__main__':
@@ -63,7 +64,7 @@ if __name__ == '__main__':
     dataset = np.vstack((dataset, specialset))
 
     dataset = normalize(dataset)
-    eigenvalue = find_Covariancematrix_eigen(dataset[:, :9])
+    eigenvalue, eigenvector = find_Covariancematrix_eigen(dataset[:, :9])
 
     pov = []
     totalsum = sum(eigenvalue)
